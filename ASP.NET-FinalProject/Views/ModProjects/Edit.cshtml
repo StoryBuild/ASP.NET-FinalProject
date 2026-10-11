@@ -1,0 +1,91 @@
+﻿@model ASP.NET_FinalProject.Models.ModProject
+
+@{
+    ViewData["Title"] = "Edit Mod";
+}
+
+<h2>Edit Mod</h2>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label">Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Author" class="control-label">Author</label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ImageUrl" class="control-label">Image URL (optional)</label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DownloadUrl" class="control-label">Download Link</label>
+                <input asp-for="DownloadUrl" class="form-control" />
+                <span asp-validation-for="DownloadUrl" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Environment" class="control-label">Environment</label>
+                <select asp-for="Environment" class="form-control">
+                    <option value="">-- Select Environment --</option>
+                    <option value="Client">Client</option>
+                    <option value="Server">Server</option>
+                    <option value="Both">Both</option>
+                </select>
+                <span asp-validation-for="Environment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
+                    <option value="">-- Select Category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="GameVersionId" class="control-label">Game Version</label>
+                <select asp-for="GameVersionId" class="form-control" asp-items="@(new SelectList(ViewBag.GameVersions, "Id", "VersionNumber"))">
+                    <option value="">-- Select Game Version --</option>
+                </select>
+                <span asp-validation-for="GameVersionId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ModLoaderId" class="control-label">Mod Loader</label>
+                <select asp-for="ModLoaderId" class="form-control" asp-items="@(new SelectList(ViewBag.ModLoaders, "Id", "Name"))">
+                    <option value="">-- Select Loader --</option>
+                </select>
+                <span asp-validation-for="ModLoaderId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <input type="submit" value="Save Changes" class="btn btn-warning" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ASP.NET_FinalProject.Models.ModProject>
+
+@{
+    ViewData["Title"] = "Mods Catalog";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>List of Mods</h2>
+    <a asp-action="Create" class="btn btn-success">Add New Mod</a>
+</div>
+
+<div class="row">
+    @foreach (var item in Model) {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                @if(!string.IsNullOrEmpty(item.ImageUrl)){
+                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;">
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">От @item.Author</h6>
+                    <p class="card-text text-truncate">@item.Description</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <small class="text-muted">@item.Category.Name | @item.GameVersion.VersionNumber</small>
+                    <div>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
