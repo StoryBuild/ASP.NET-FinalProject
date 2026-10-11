@@ -764,6 +764,269 @@ namespace ASP.NET_FinalProject.Migrations
                     b.ToTable("ModProjects");
                 });
 
+            modelBuilder.Entity("ASP.NET_FinalProject.Models.ResourceCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResourceCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Combat"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Cursed"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Decoration"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Modded"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Realistic"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Simplistic"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Themed"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Tweaks"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Utility"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Vanilla Like"
+                        });
+                });
+
+            modelBuilder.Entity("ASP.NET_FinalProject.Models.ResourceFeature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResourceFeatures");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Audio"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Blocks"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Core Shaders"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Entities"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Environment"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Equipment"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Fonts"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "GUI"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Items"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Locale"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Models"
+                        });
+                });
+
+            modelBuilder.Entity("ASP.NET_FinalProject.Models.ResourcePack", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("DownloadUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Downloads")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GameVersionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ResourceCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResourceFeatureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResourceResolutionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameVersionId");
+
+                    b.HasIndex("ResourceCategoryId");
+
+                    b.HasIndex("ResourceFeatureId");
+
+                    b.HasIndex("ResourceResolutionId");
+
+                    b.ToTable("ResourcePacks");
+                });
+
+            modelBuilder.Entity("ASP.NET_FinalProject.Models.ResourceResolution", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResourceResolutions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "8x or lower"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "16x"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "32x"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "48x"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "64x"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "128x"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "256x"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "512x or higher"
+                        });
+                });
+
             modelBuilder.Entity("ASP.NET_FinalProject.Models.ModProject", b =>
                 {
                     b.HasOne("ASP.NET_FinalProject.Models.Category", "Category")
@@ -789,6 +1052,41 @@ namespace ASP.NET_FinalProject.Migrations
                     b.Navigation("GameVersion");
 
                     b.Navigation("ModLoader");
+                });
+
+            modelBuilder.Entity("ASP.NET_FinalProject.Models.ResourcePack", b =>
+                {
+                    b.HasOne("ASP.NET_FinalProject.Models.GameVersion", "GameVersion")
+                        .WithMany()
+                        .HasForeignKey("GameVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASP.NET_FinalProject.Models.ResourceCategory", "ResourceCategory")
+                        .WithMany()
+                        .HasForeignKey("ResourceCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASP.NET_FinalProject.Models.ResourceFeature", "ResourceFeature")
+                        .WithMany()
+                        .HasForeignKey("ResourceFeatureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ASP.NET_FinalProject.Models.ResourceResolution", "ResourceResolution")
+                        .WithMany()
+                        .HasForeignKey("ResourceResolutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GameVersion");
+
+                    b.Navigation("ResourceCategory");
+
+                    b.Navigation("ResourceFeature");
+
+                    b.Navigation("ResourceResolution");
                 });
 #pragma warning restore 612, 618
         }

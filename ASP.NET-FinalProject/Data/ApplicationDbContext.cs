@@ -14,6 +14,10 @@ namespace ASP.NET_FinalProject.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<GameVersion> GameVersions { get; set; }
         public DbSet<ModLoader> ModLoaders { get; set; }
+        public DbSet<ResourcePack> ResourcePacks { get; set; }
+        public DbSet<ResourceCategory> ResourceCategories { get; set; }
+        public DbSet<ResourceFeature> ResourceFeatures { get; set; }
+        public DbSet<ResourceResolution> ResourceResolutions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +39,24 @@ namespace ASP.NET_FinalProject.Data
             for (int i = 0; i < versions.Length; i++)
             {
                 modelBuilder.Entity<GameVersion>().HasData(new GameVersion { Id = i + 1, VersionNumber = versions[i] });
+            }
+
+            var resCategories = new[] { "Combat", "Cursed", "Decoration", "Modded", "Realistic", "Simplistic", "Themed", "Tweaks", "Utility", "Vanilla Like" };
+            for (int i = 0; i < resCategories.Length; i++)
+            {
+                modelBuilder.Entity<ResourceCategory>().HasData(new ResourceCategory { Id = i + 1, Name = resCategories[i] });
+            }
+
+            var resFeatures = new[] { "Audio", "Blocks", "Core Shaders", "Entities", "Environment", "Equipment", "Fonts", "GUI", "Items", "Locale", "Models" };
+            for (int i = 0; i < resFeatures.Length; i++)
+            {
+                modelBuilder.Entity<ResourceFeature>().HasData(new ResourceFeature { Id = i + 1, Name = resFeatures[i] });
+            }
+
+            var resResolutions = new[] { "8x or lower", "16x", "32x", "48x", "64x", "128x", "256x", "512x or higher" };
+            for (int i = 0; i < resResolutions.Length; i++)
+            {
+                modelBuilder.Entity<ResourceResolution>().HasData(new ResourceResolution { Id = i + 1, Name = resResolutions[i] });
             }
         }
     }
