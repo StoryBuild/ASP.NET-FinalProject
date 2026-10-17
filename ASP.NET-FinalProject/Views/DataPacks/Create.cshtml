@@ -1,0 +1,59 @@
+﻿@model ASP.NET_FinalProject.Models.DataPack
+
+@{
+    ViewData["Title"] = "Add Data Pack";
+}
+
+<h2>Add New Data Pack</h2>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label">Title</label>
+                <input asp-for="Title" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Author" class="control-label">Author</label>
+                <input asp-for="Author" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ImageUrl" class="control-label">Image URL (Optional)</label>
+                <input asp-for="ImageUrl" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DownloadUrl" class="control-label">Download URL</label>
+                <input asp-for="DownloadUrl" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DataPackCategoryId" class="control-label">Category</label>
+                <select asp-for="DataPackCategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
+                    <option value="">-- Select Category --</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="GameVersionId" class="control-label">Game Version</label>
+                <select asp-for="GameVersionId" class="form-control" asp-items="@(new SelectList(ViewBag.GameVersions, "Id", "VersionNumber"))">
+                    <option value="">-- Select Game Version --</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
