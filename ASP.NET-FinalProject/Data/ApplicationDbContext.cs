@@ -18,6 +18,8 @@ namespace ASP.NET_FinalProject.Data
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
         public DbSet<ResourceFeature> ResourceFeatures { get; set; }
         public DbSet<ResourceResolution> ResourceResolutions { get; set; }
+        public DbSet<DataPack> DataPacks { get; set; }
+        public DbSet<DataPackCategory> DataPackCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +59,11 @@ namespace ASP.NET_FinalProject.Data
             for (int i = 0; i < resResolutions.Length; i++)
             {
                 modelBuilder.Entity<ResourceResolution>().HasData(new ResourceResolution { Id = i + 1, Name = resResolutions[i] });
+            }
+            var dpCategories = new[] { "Adventure", "Cursed", "Decoration", "Economy", "Equipment", "Food", "Game Mechanics", "Library", "Magic", "Management", "Minigame", "Mobs", "Optimization", "Social", "Storage", "Technology", "Transportation", "Utility", "World Generation" };
+            for (int i = 0; i < dpCategories.Length; i++)
+            {
+                modelBuilder.Entity<DataPackCategory>().HasData(new DataPackCategory { Id = i + 1, Name = dpCategories[i] });
             }
         }
     }
