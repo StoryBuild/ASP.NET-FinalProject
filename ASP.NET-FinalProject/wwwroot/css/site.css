@@ -29,3 +29,86 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+body {
+    background-color: #111116;
+    color: #e0e0e0;
+}
+
+.text-accent {
+    color: #3b82f6 !important;
+}
+
+.btn-accent {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-accent:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.hero-container {
+    background: radial-gradient(circle at center, #1e1e2e 0%, #111116 70%);
+    padding: 100px 0 60px 0;
+    margin-top: -20px;
+    border-bottom: 1px solid #2a2a35;
+}
+
+.hero-subtitle {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.recent-card {
+    background-color: #1c1c24;
+    border: 1px solid #2a2a35;
+    transition: all 0.2s ease-in-out;
+    height: 80px;
+}
+
+    .recent-card:hover {
+        background-color: #252530;
+        border-color: #3b82f6;
+        transform: translateY(-2px);
+    }
+
+.recent-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.recent-info h6 {
+    font-weight: 600;
+}
+
+.card {
+    background-color: #1c1c24 !important;
+    border: 1px solid #2a2a35 !important;
+    color: #e0e0e0 !important;
+}
+
+.card-footer, .card-footer.bg-light {
+    background-color: #252530 !important;
+    border-top: 1px solid #2a2a35 !important;
+}
+
+.card-title, h5 {
+    color: #ffffff !important;
+}
+
+.text-muted, .card-subtitle {
+    color: #a0a0b0 !important;
+}
+
+.bg-light {
+    background-color: #1c1c24 !important;
+    color: #e0e0e0 !important;
+}
+
+.card a:not(.btn) {
+    color: #3b82f6;
+}

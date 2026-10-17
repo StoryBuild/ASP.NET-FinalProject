@@ -1,8 +1,74 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-container text-center">
+    <div class="hero-content">
+        <div class="hero-logo mb-4">
+            <i class="bi bi-tools text-accent" style="font-size: 4rem;"></i>
+        </div>
+        
+        <h1 class="display-3 fw-bold text-white mb-3">
+            The place for Minecraft<br />
+            <span class="text-accent">content</span>
+        </h1>
+        
+        <p class="lead text-secondary mb-5 hero-subtitle">
+            Discover, play, and share Minecraft content through our platform, created for the community.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 mb-5">
+            <a asp-controller="ModProjects" asp-action="Index" class="btn btn-accent btn-lg px-4 rounded-pill fw-bold">
+                <i class="bi bi-compass"></i> Discover mods
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <h4 class="text-white mb-4">Recent Mods</h4>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-5">
+        @foreach (var mod in ViewBag.RecentMods)
+        {
+            <div class="col">
+                <a asp-controller="ModProjects" asp-action="Details" asp-route-id="@mod.Id" class="text-decoration-none">
+                    <div class="recent-card d-flex align-items-center p-3 rounded-4 shadow-sm">
+                        <div class="recent-icon me-3 bg-dark rounded-3">
+                            @if (!string.IsNullOrEmpty(mod.ImageUrl))
+                            {
+                                <img src="@mod.ImageUrl" alt="@mod.Title" class="w-100 h-100 rounded-3" style="object-fit: cover;">
+                            }
+                        </div>
+                        <div class="recent-info overflow-hidden">
+                            <h6 class="text-white mb-1 text-truncate">@mod.Title</h6>
+                            <p class="text-secondary mb-0 small text-truncate">@mod.Description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <h4 class="text-white mb-4">Recent Resource Packs</h4>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-5">
+        @foreach (var pack in ViewBag.RecentResourcePacks)
+        {
+            <div class="col">
+                <a asp-controller="ResourcePacks" asp-action="Details" asp-route-id="@pack.Id" class="text-decoration-none">
+                    <div class="recent-card d-flex align-items-center p-3 rounded-4 shadow-sm">
+                        <div class="recent-icon me-3 bg-dark rounded-3">
+                             @if (!string.IsNullOrEmpty(pack.ImageUrl))
+                            {
+                                <img src="@pack.ImageUrl" alt="@pack.Title" class="w-100 h-100 rounded-3" style="object-fit: cover;">
+                            }
+                        </div>
+                        <div class="recent-info overflow-hidden">
+                            <h6 class="text-white mb-1 text-truncate">@pack.Title</h6>
+                            <p class="text-secondary mb-0 small text-truncate">@pack.Description</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
 </div>
