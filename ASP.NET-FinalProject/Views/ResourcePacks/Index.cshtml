@@ -12,30 +12,7 @@
 <div class="row">
     @foreach (var item in Model) {
         <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                @if(!string.IsNullOrEmpty(item.ImageUrl)){
-                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;">
-                }
-                <div class="card-body">
-                    <h5 class="card-title">@item.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">By @item.Author</h6>
-                    <p class="card-text text-truncate">@item.Description</p>
-                </div>
-                <div class="card-footer bg-light">
-                    <div class="mb-2">
-                        <span class="badge bg-primary text-light">@item.ResourceCategory.Name</span>
-                        <span class="badge bg-success text-light">@item.ResourceFeature.Name</span>
-                        <span class="badge bg-warning text-dark">@item.ResourceResolution.Name</span>
-                        <span class="badge bg-secondary text-light">@item.GameVersion.VersionNumber</span>
-                    </div>
-                    
-                    <div class="d-flex justify-content-end gap-1">
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Details</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning text-dark">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
-                    </div>
-                </div>
-            </div>
+            <partial name="_ResourcePackCard" model="item" />
         </div>
     }
 </div>
