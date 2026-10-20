@@ -38,10 +38,5 @@ namespace ASP.NET_FinalProject.Controllers
 
             return View();
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
     }
 }
