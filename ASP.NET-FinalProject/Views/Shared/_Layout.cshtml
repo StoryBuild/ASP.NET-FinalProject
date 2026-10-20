@@ -11,26 +11,28 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ASP.NET_FinalProject</a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark custom-navbar border-bottom box-shadow mb-3">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bold fs-4 text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-tools text-accent me-2"></i>ASP.NET_FinalProject
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav fs-5 gap-3">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ModProjects" asp-action="Index">Mods</a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="ModProjects" asp-action="Index">Mods</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ResourcePacks" asp-action="Index">Resource Packs</a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="ResourcePacks" asp-action="Index">Resource Packs</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DataPacks" asp-action="Index">Data Packs</a>
+                            <a class="nav-link custom-nav-link" asp-area="" asp-controller="DataPacks" asp-action="Index">Data Packs</a>
                         </li>
                     </ul>
                 </div>

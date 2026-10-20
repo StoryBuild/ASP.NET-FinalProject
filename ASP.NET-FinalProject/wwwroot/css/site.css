@@ -69,11 +69,11 @@ body {
     height: 80px;
 }
 
-    .recent-card:hover {
-        background-color: #252530;
-        border-color: #3b82f6;
-        transform: translateY(-2px);
-    }
+.recent-card:hover {
+    background-color: #252530;
+    border-color: #3b82f6;
+     transform: translateY(-2px);
+}
 
 .recent-icon {
     width: 48px;
@@ -111,4 +111,27 @@ body {
 
 .card a:not(.btn) {
     color: #3b82f6;
+}
+
+.custom-navbar {
+    background-color: #0d0d12 !important;
+    border-bottom: 2px solid #3b82f6 !important;
+}
+
+.custom-nav-link {
+    color: #e0e0e0 !important;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+    .custom-nav-link:hover {
+        color: #3b82f6 !important;
+    }
+
+.border-top {
+    border-top: 1px solid #2a2a35 !important;
+}
+
+footer.footer.text-muted {
+    color: #a0a0b0 !important;
 }
