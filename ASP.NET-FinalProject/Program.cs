@@ -1,7 +1,8 @@
 using ASP.NET_FinalProject.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using ASP.NET_FinalProject.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ASP.NET_FinalProject
@@ -14,6 +15,9 @@ namespace ASP.NET_FinalProject
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+                options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -30,7 +34,7 @@ namespace ASP.NET_FinalProject
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
