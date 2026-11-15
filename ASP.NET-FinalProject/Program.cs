@@ -3,7 +3,8 @@ using ASP.NET_FinalProject.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using ASP.NET_FinalProject.Data;
+using ASP.NET_FinalProject.Data;
 
 namespace ASP.NET_FinalProject
 {
