@@ -2,6 +2,7 @@
 using ASP.NET_FinalProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_FinalProject.Controllers
 {
@@ -23,6 +24,7 @@ namespace ASP.NET_FinalProject.Controllers
 
             return View(mods);
         }
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewBag.Categories = _context.Categories.ToList();
@@ -66,6 +68,7 @@ namespace ASP.NET_FinalProject.Controllers
             return View(modProject);
         }
 
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -109,7 +112,8 @@ namespace ASP.NET_FinalProject.Controllers
             ViewBag.ModLoaders = _context.ModLoaders.ToList();
             return View(modProject);
         }
-
+        
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
