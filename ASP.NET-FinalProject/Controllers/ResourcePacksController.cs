@@ -14,16 +14,23 @@ namespace ASP.NET_FinalProject.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var packs = await _context.ResourcePacks
+            ViewData["CurrentFilter"] = searchString;
+
+            var packs = _context.ResourcePacks
                 .Include(r => r.ResourceCategory)
                 .Include(r => r.ResourceFeature)
                 .Include(r => r.ResourceResolution)
                 .Include(r => r.GameVersion)
-                .ToListAsync();
+                .AsQueryable();
 
-            return View(packs);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                packs = packs.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
+            }
+
+            return View(await packs.ToListAsync());
         }
 
         [Authorize(Roles = "Administrator")]
