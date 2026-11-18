@@ -3,7 +3,19 @@
 @{
     ViewData["Title"] = "Mods Catalog";
 }
-
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" 
+                       class="form-control bg-dark text-light border-secondary" 
+                       placeholder="Search..." />
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+            </div>
+        </div>
+    </div>
+</form>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>List of Mods</h2>
     @if (User.IsInRole("Administrator"))

@@ -14,15 +14,22 @@ namespace ASP.NET_FinalProject.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var mods = await _context.ModProjects
-                .Include(m => m.Category)
-                .Include(m => m.GameVersion)
-                .Include(m => m.ModLoader)
-                .ToListAsync();
+            ViewData["CurrentFilter"] = searchString;
 
-            return View(mods);
+            var mods = _context.ModProjects
+                .Include(m => m.Category)
+                .Include(m => m.ModLoader)
+                .Include(m => m.GameVersion)
+                .AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                mods = mods.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
+            }
+
+            return View(await mods.ToListAsync());
         }
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
