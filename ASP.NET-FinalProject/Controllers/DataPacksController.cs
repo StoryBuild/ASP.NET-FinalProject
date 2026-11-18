@@ -15,16 +15,22 @@ namespace ASP.NET_FinalProject.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var dataPacks = await _context.DataPacks
+            ViewData["CurrentFilter"] = searchString;
+
+            var dataPacks = _context.DataPacks
                 .Include(d => d.DataPackCategory)
                 .Include(d => d.GameVersion)
-                .ToListAsync();
+                .AsQueryable();
 
-            return View(dataPacks);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                dataPacks = dataPacks.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
+            }
+
+            return View(await dataPacks.ToListAsync());
         }
-
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
