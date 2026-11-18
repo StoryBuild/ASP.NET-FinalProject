@@ -1,5 +1,6 @@
 ﻿using ASP.NET_FinalProject.Data;
 using ASP.NET_FinalProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,7 @@ namespace ASP.NET_FinalProject.Controllers
             return View(packs);
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewBag.Categories = _context.ResourceCategories.ToList();
@@ -35,6 +37,7 @@ namespace ASP.NET_FinalProject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(ResourcePack resourcePack)
         {
             ModelState.Remove("ResourceCategory");
@@ -71,6 +74,7 @@ namespace ASP.NET_FinalProject.Controllers
 
             return View(pack);
         }
+        [Authorize(Roles = "Administrator")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -88,6 +92,7 @@ namespace ASP.NET_FinalProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, ResourcePack resourcePack)
         {
             if (id != resourcePack.Id) return NotFound();
@@ -118,7 +123,7 @@ namespace ASP.NET_FinalProject.Controllers
             ViewBag.GameVersions = _context.GameVersions.ToList();
             return View(resourcePack);
         }
-
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -137,6 +142,7 @@ namespace ASP.NET_FinalProject.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var pack = await _context.ResourcePacks.FindAsync(id);

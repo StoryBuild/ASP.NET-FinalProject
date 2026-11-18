@@ -35,6 +35,7 @@ namespace ASP.NET_FinalProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(ModProject modProject)
         {
             ModelState.Remove("Category");
@@ -84,6 +85,7 @@ namespace ASP.NET_FinalProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, ModProject modProject)
         {
             if (id != modProject.Id) return NotFound();
@@ -131,6 +133,7 @@ namespace ASP.NET_FinalProject.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var modProject = await _context.ModProjects.FindAsync(id);

@@ -1,5 +1,6 @@
 ﻿using ASP.NET_FinalProject.Data;
 using ASP.NET_FinalProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +38,7 @@ namespace ASP.NET_FinalProject.Controllers
 
             return View(dataPack);
         }
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewBag.Categories = _context.DataPackCategories.ToList();
@@ -46,6 +47,7 @@ namespace ASP.NET_FinalProject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(DataPack dataPack)
         {
             ModelState.Remove("DataPackCategory");
@@ -62,6 +64,7 @@ namespace ASP.NET_FinalProject.Controllers
             ViewBag.GameVersions = _context.GameVersions.ToList();
             return View(dataPack);
         }
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -75,6 +78,7 @@ namespace ASP.NET_FinalProject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, DataPack dataPack)
         {
             if (id != dataPack.Id) return NotFound();
@@ -101,6 +105,7 @@ namespace ASP.NET_FinalProject.Controllers
             ViewBag.GameVersions = _context.GameVersions.ToList();
             return View(dataPack);
         }
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -117,6 +122,7 @@ namespace ASP.NET_FinalProject.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var dataPack = await _context.DataPacks.FindAsync(id);
