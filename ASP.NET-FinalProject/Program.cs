@@ -28,6 +28,7 @@ namespace ASP.NET_FinalProject
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IModProjectService, ModProjectService>();
+            builder.Services.AddScoped<IResourcePackService, ResourcePackService>();
 
             var app = builder.Build();
 

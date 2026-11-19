@@ -1,5 +1,5 @@
-﻿using ASP.NET_FinalProject.Data;
-using ASP.NET_FinalProject.Models;
+﻿using ASP.NET_FinalProject.Models;
+using ASP.NET_FinalProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,40 +8,27 @@ namespace ASP.NET_FinalProject.Controllers
 {
     public class ResourcePacksController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IResourcePackService _resourcePackService;
 
-        public ResourcePacksController(ApplicationDbContext context)
+        public ResourcePacksController(IResourcePackService resourcePackService)
         {
-            _context = context;
+            _resourcePackService = resourcePackService;
         }
-        public async Task<IActionResult> Index(string searchString)
+
+        public async Task<IActionResult> Index(string? searchString)
         {
             ViewData["CurrentFilter"] = searchString;
-
-            var packs = _context.ResourcePacks
-                .Include(r => r.ResourceCategory)
-                .Include(r => r.ResourceFeature)
-                .Include(r => r.ResourceResolution)
-                .Include(r => r.GameVersion)
-                .AsQueryable();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                packs = packs.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
-            }
-
-            return View(await packs.ToListAsync());
+            var packs = await _resourcePackService.GetAllAsync(searchString);
+            return View(packs);
         }
 
         [Authorize(Roles = "Administrator")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = _context.ResourceCategories.ToList();
-            ViewBag.Features = _context.ResourceFeatures.ToList();
-            ViewBag.Resolutions = _context.ResourceResolutions.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
@@ -54,15 +41,11 @@ namespace ASP.NET_FinalProject.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(resourcePack);
-                await _context.SaveChangesAsync();
+                await _resourcePackService.CreateAsync(resourcePack);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.ResourceCategories.ToList();
-            ViewBag.Features = _context.ResourceFeatures.ToList();
-            ViewBag.Resolutions = _context.ResourceResolutions.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View(resourcePack);
         }
 
@@ -70,30 +53,21 @@ namespace ASP.NET_FinalProject.Controllers
         {
             if (id == null) return NotFound();
 
-            var pack = await _context.ResourcePacks
-                .Include(r => r.ResourceCategory)
-                .Include(r => r.ResourceFeature)
-                .Include(r => r.ResourceResolution)
-                .Include(r => r.GameVersion)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var pack = await _resourcePackService.GetByIdWithDetailsAsync(id.Value);
             if (pack == null) return NotFound();
 
             return View(pack);
         }
-        [Authorize(Roles = "Administrator")]
 
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var pack = await _context.ResourcePacks.FindAsync(id);
+            var pack = await _resourcePackService.GetByIdAsync(id.Value);
             if (pack == null) return NotFound();
 
-            ViewBag.Categories = _context.ResourceCategories.ToList();
-            ViewBag.Features = _context.ResourceFeatures.ToList();
-            ViewBag.Resolutions = _context.ResourceResolutions.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View(pack);
         }
 
@@ -113,35 +87,26 @@ namespace ASP.NET_FinalProject.Controllers
             {
                 try
                 {
-                    _context.Update(resourcePack);
-                    await _context.SaveChangesAsync();
+                    await _resourcePackService.UpdateAsync(resourcePack);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.ResourcePacks.Any(e => e.Id == resourcePack.Id)) return NotFound();
+                    if (!await _resourcePackService.ExistsAsync(resourcePack.Id)) return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.ResourceCategories.ToList();
-            ViewBag.Features = _context.ResourceFeatures.ToList();
-            ViewBag.Resolutions = _context.ResourceResolutions.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View(resourcePack);
         }
+
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var pack = await _context.ResourcePacks
-                .Include(r => r.ResourceCategory)
-                .Include(r => r.ResourceFeature)
-                .Include(r => r.ResourceResolution)
-                .Include(r => r.GameVersion)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var pack = await _resourcePackService.GetByIdWithDetailsAsync(id.Value);
             if (pack == null) return NotFound();
 
             return View(pack);
@@ -152,14 +117,16 @@ namespace ASP.NET_FinalProject.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pack = await _context.ResourcePacks.FindAsync(id);
-            if (pack != null)
-            {
-                _context.ResourcePacks.Remove(pack);
-            }
-
-            await _context.SaveChangesAsync();
+            await _resourcePackService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task PopulateDropdownsAsync()
+        {
+            ViewBag.Categories = await _resourcePackService.GetCategoriesAsync();
+            ViewBag.Features = await _resourcePackService.GetFeaturesAsync();
+            ViewBag.Resolutions = await _resourcePackService.GetResolutionsAsync();
+            ViewBag.GameVersions = await _resourcePackService.GetGameVersionsAsync();
         }
     }
 }
