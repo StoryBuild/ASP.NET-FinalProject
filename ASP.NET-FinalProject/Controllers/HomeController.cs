@@ -1,7 +1,4 @@
 using ASP.NET_FinalProject.Data;
-using ASP.NET_FinalProject.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +34,18 @@ namespace ASP.NET_FinalProject.Controllers
                 .ToListAsync();
 
             return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [Route("Home/Error/{statusCode?}")]
+        public IActionResult Error(int? statusCode = null)
+        {
+            if (statusCode == 404)
+            {
+                return View("Error404");
+            }
+
+            return View("Error500");
         }
     }
 }
