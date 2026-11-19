@@ -1,5 +1,5 @@
-﻿using ASP.NET_FinalProject.Data;
-using ASP.NET_FinalProject.Models;
+﻿using ASP.NET_FinalProject.Models;
+using ASP.NET_FinalProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,49 +8,37 @@ namespace ASP.NET_FinalProject.Controllers
 {
     public class DataPacksController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDataPackService _dataPackService;
 
-        public DataPacksController(ApplicationDbContext context)
+        public DataPacksController(IDataPackService dataPackService)
         {
-            _context = context;
+            _dataPackService = dataPackService;
         }
 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string? searchString)
         {
             ViewData["CurrentFilter"] = searchString;
-
-            var dataPacks = _context.DataPacks
-                .Include(d => d.DataPackCategory)
-                .Include(d => d.GameVersion)
-                .AsQueryable();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                dataPacks = dataPacks.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
-            }
-
-            return View(await dataPacks.ToListAsync());
+            var dataPacks = await _dataPackService.GetAllAsync(searchString);
+            return View(dataPacks);
         }
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var dataPack = await _context.DataPacks
-                .Include(d => d.DataPackCategory)
-                .Include(d => d.GameVersion)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var dataPack = await _dataPackService.GetByIdWithDetailsAsync(id.Value);
             if (dataPack == null) return NotFound();
 
             return View(dataPack);
         }
+
         [Authorize(Roles = "Administrator")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = _context.DataPackCategories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
@@ -61,27 +49,26 @@ namespace ASP.NET_FinalProject.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(dataPack);
-                await _context.SaveChangesAsync();
+                await _dataPackService.CreateAsync(dataPack);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.DataPackCategories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View(dataPack);
         }
+
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var dataPack = await _context.DataPacks.FindAsync(id);
+            var dataPack = await _dataPackService.GetByIdAsync(id.Value);
             if (dataPack == null) return NotFound();
 
-            ViewBag.Categories = _context.DataPackCategories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View(dataPack);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
@@ -96,31 +83,26 @@ namespace ASP.NET_FinalProject.Controllers
             {
                 try
                 {
-                    _context.Update(dataPack);
-                    await _context.SaveChangesAsync();
+                    await _dataPackService.UpdateAsync(dataPack);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.DataPacks.Any(e => e.Id == dataPack.Id)) return NotFound();
+                    if (!await _dataPackService.ExistsAsync(dataPack.Id)) return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.DataPackCategories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
+            await PopulateDropdownsAsync();
             return View(dataPack);
         }
+
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var dataPack = await _context.DataPacks
-                .Include(d => d.DataPackCategory)
-                .Include(d => d.GameVersion)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var dataPack = await _dataPackService.GetByIdWithDetailsAsync(id.Value);
             if (dataPack == null) return NotFound();
 
             return View(dataPack);
@@ -131,14 +113,14 @@ namespace ASP.NET_FinalProject.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dataPack = await _context.DataPacks.FindAsync(id);
-            if (dataPack != null)
-            {
-                _context.DataPacks.Remove(dataPack);
-            }
-
-            await _context.SaveChangesAsync();
+            await _dataPackService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task PopulateDropdownsAsync()
+        {
+            ViewBag.Categories = await _dataPackService.GetCategoriesAsync();
+            ViewBag.GameVersions = await _dataPackService.GetGameVersionsAsync();
         }
     }
 }

@@ -29,6 +29,7 @@ namespace ASP.NET_FinalProject
 
             builder.Services.AddScoped<IModProjectService, ModProjectService>();
             builder.Services.AddScoped<IResourcePackService, ResourcePackService>();
+            builder.Services.AddScoped<IDataPackService, DataPackService>();
 
             var app = builder.Build();
 
