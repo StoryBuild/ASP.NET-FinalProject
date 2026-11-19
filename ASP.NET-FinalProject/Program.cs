@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_FinalProject.Data;
 using ASP.NET_FinalProject.Data;
+using ASP.NET_FinalProject.Services;
+using ASP.NET_FinalProject.Services.Interfaces;
 
 namespace ASP.NET_FinalProject
 {
@@ -24,6 +26,8 @@ namespace ASP.NET_FinalProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IModProjectService, ModProjectService>();
 
             var app = builder.Build();
 

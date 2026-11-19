@@ -1,42 +1,31 @@
-﻿using ASP.NET_FinalProject.Data;
-using ASP.NET_FinalProject.Models;
+﻿using ASP.NET_FinalProject.Models;
+using ASP.NET_FinalProject.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_FinalProject.Controllers
 {
     public class ModProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IModProjectService _modProjectService;
 
-        public ModProjectsController(ApplicationDbContext context)
+        public ModProjectsController(IModProjectService modProjectService)
         {
-            _context = context;
+            _modProjectService = modProjectService;
         }
-        public async Task<IActionResult> Index(string searchString)
+
+        public async Task<IActionResult> Index(string? searchString)
         {
             ViewData["CurrentFilter"] = searchString;
-
-            var mods = _context.ModProjects
-                .Include(m => m.Category)
-                .Include(m => m.ModLoader)
-                .Include(m => m.GameVersion)
-                .AsQueryable();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                mods = mods.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
-            }
-
-            return View(await mods.ToListAsync());
+            var mods = await _modProjectService.GetAllAsync(searchString);
+            return View(mods);
         }
+
         [Authorize(Roles = "Administrator")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
-            ViewBag.ModLoaders = _context.ModLoaders.ToList();
+            await PopulateDropdownsAsync();
             return View();
         }
 
@@ -51,26 +40,19 @@ namespace ASP.NET_FinalProject.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(modProject);
-                await _context.SaveChangesAsync();
+                await _modProjectService.CreateAsync(modProject);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
-            ViewBag.ModLoaders = _context.ModLoaders.ToList();
+            await PopulateDropdownsAsync();
             return View(modProject);
         }
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var modProject = await _context.ModProjects
-                .Include(m => m.Category)
-                .Include(m => m.GameVersion)
-                .Include(m => m.ModLoader)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var modProject = await _modProjectService.GetByIdWithDetailsAsync(id.Value);
             if (modProject == null) return NotFound();
 
             return View(modProject);
@@ -81,12 +63,10 @@ namespace ASP.NET_FinalProject.Controllers
         {
             if (id == null) return NotFound();
 
-            var modProject = await _context.ModProjects.FindAsync(id);
+            var modProject = await _modProjectService.GetByIdAsync(id.Value);
             if (modProject == null) return NotFound();
 
-            ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
-            ViewBag.ModLoaders = _context.ModLoaders.ToList();
+            await PopulateDropdownsAsync();
             return View(modProject);
         }
 
@@ -105,34 +85,26 @@ namespace ASP.NET_FinalProject.Controllers
             {
                 try
                 {
-                    _context.Update(modProject);
-                    await _context.SaveChangesAsync();
+                    await _modProjectService.UpdateAsync(modProject);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.ModProjects.Any(e => e.Id == modProject.Id)) return NotFound();
+                    if (!await _modProjectService.ExistsAsync(modProject.Id)) return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.GameVersions = _context.GameVersions.ToList();
-            ViewBag.ModLoaders = _context.ModLoaders.ToList();
+            await PopulateDropdownsAsync();
             return View(modProject);
         }
-        
+
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var modProject = await _context.ModProjects
-                .Include(m => m.Category)
-                .Include(m => m.GameVersion)
-                .Include(m => m.ModLoader)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var modProject = await _modProjectService.GetByIdWithDetailsAsync(id.Value);
             if (modProject == null) return NotFound();
 
             return View(modProject);
@@ -143,14 +115,15 @@ namespace ASP.NET_FinalProject.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var modProject = await _context.ModProjects.FindAsync(id);
-            if (modProject != null)
-            {
-                _context.ModProjects.Remove(modProject);
-            }
-
-            await _context.SaveChangesAsync();
+            await _modProjectService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task PopulateDropdownsAsync()
+        {
+            ViewBag.Categories = await _modProjectService.GetCategoriesAsync();
+            ViewBag.GameVersions = await _modProjectService.GetGameVersionsAsync();
+            ViewBag.ModLoaders = await _modProjectService.GetModLoadersAsync();
         }
     }
 }
