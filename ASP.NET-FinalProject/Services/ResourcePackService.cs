@@ -92,5 +92,23 @@ namespace ASP.NET_FinalProject.Services
         {
             return await _context.GameVersions.ToListAsync();
         }
+        public async Task<PaginatedList<ResourcePack>> GetPaginatedAsync(string? searchString, int pageIndex, int pageSize)
+        {
+            var packs = _context.ResourcePacks
+                .Include(r => r.ResourceCategory)
+                .Include(r => r.ResourceFeature)
+                .Include(r => r.ResourceResolution)
+                .Include(r => r.GameVersion)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                packs = packs.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
+            }
+
+            packs = packs.OrderByDescending(r => r.Id);
+
+            return await PaginatedList<ResourcePack>.CreateAsync(packs, pageIndex, pageSize);
+        }
     }
 }

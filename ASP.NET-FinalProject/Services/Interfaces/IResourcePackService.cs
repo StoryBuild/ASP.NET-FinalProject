@@ -16,5 +16,6 @@ namespace ASP.NET_FinalProject.Services.Interfaces
         Task<IEnumerable<ResourceFeature>> GetFeaturesAsync();
         Task<IEnumerable<ResourceResolution>> GetResolutionsAsync();
         Task<IEnumerable<GameVersion>> GetGameVersionsAsync();
+        Task<PaginatedList<ResourcePack>> GetPaginatedAsync(string? searchString, int pageIndex, int pageSize);
     }
 }
