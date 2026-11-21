@@ -85,5 +85,22 @@ namespace ASP.NET_FinalProject.Services
         {
             return await _context.ModLoaders.ToListAsync();
         }
+        public async Task<PaginatedList<ModProject>> GetPaginatedAsync(string? searchString, int pageIndex, int pageSize)
+        {
+            var mods = _context.ModProjects
+                .Include(m => m.Category)
+                .Include(m => m.ModLoader)
+                .Include(m => m.GameVersion)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                mods = mods.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
+            }
+
+            mods = mods.OrderByDescending(m => m.Id);
+
+            return await PaginatedList<ModProject>.CreateAsync(mods, pageIndex, pageSize);
+        }
     }
 }

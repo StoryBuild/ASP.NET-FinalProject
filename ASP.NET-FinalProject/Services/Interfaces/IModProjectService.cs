@@ -15,5 +15,6 @@ namespace ASP.NET_FinalProject.Services.Interfaces
         Task<IEnumerable<Category>> GetCategoriesAsync();
         Task<IEnumerable<GameVersion>> GetGameVersionsAsync();
         Task<IEnumerable<ModLoader>> GetModLoadersAsync();
+        Task<PaginatedList<ModProject>> GetPaginatedAsync(string? searchString, int pageIndex, int pageSize);
     }
 }

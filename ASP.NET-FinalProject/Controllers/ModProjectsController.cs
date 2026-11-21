@@ -15,10 +15,11 @@ namespace ASP.NET_FinalProject.Controllers
             _modProjectService = modProjectService;
         }
 
-        public async Task<IActionResult> Index(string? searchString)
+        public async Task<IActionResult> Index(string? searchString, int pageNumber = 1)
         {
             ViewData["CurrentFilter"] = searchString;
-            var mods = await _modProjectService.GetAllAsync(searchString);
+            const int pageSize = 6;
+            var mods = await _modProjectService.GetPaginatedAsync(searchString, pageNumber, pageSize);
             return View(mods);
         }
 
