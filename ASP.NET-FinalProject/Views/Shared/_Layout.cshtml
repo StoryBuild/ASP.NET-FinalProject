@@ -34,6 +34,12 @@
                         <li class="nav-item">
                             <a class="nav-link custom-nav-link" asp-area="" asp-controller="DataPacks" asp-action="Index">Data Packs</a>
                         </li>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning fw-semibold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Panel</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)

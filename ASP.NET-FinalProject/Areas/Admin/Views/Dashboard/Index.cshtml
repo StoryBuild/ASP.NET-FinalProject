@@ -1,0 +1,46 @@
+﻿@using ASP.NET_FinalProject.Areas.Admin.Models
+@model AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-4 text-light">
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-center p-3">
+                <h6 class="text-secondary">Mods</h6>
+                <h2 class="text-primary fw-bold">@Model.ModsCount</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-center p-3">
+                <h6 class="text-secondary">Resource Packs</h6>
+                <h2 class="text-success fw-bold">@Model.ResourcePacksCount</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-center p-3">
+                <h6 class="text-secondary">Data Packs</h6>
+                <h2 class="text-warning fw-bold">@Model.DataPacksCount</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary text-center p-3">
+                <h6 class="text-secondary">Registered Users</h6>
+                <h2 class="text-info fw-bold">@Model.UsersCount</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark border-secondary p-4">
+        <h4 class="mb-3">Quick Actions</h4>
+        <div class="d-flex flex-wrap gap-3">
+            <a asp-area="" asp-controller="ModProjects" asp-action="Create" class="btn btn-primary">Add New Mod</a>
+            <a asp-area="" asp-controller="ResourcePacks" asp-action="Create" class="btn btn-success">Add New Resource Pack</a>
+            <a asp-area="" asp-controller="DataPacks" asp-action="Create" class="btn btn-warning">Add New Data Pack</a>
+        </div>
+    </div>
+</div>
