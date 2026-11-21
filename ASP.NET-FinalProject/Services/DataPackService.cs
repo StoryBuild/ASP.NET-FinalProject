@@ -78,5 +78,21 @@ namespace ASP.NET_FinalProject.Services
         {
             return await _context.GameVersions.ToListAsync();
         }
+        public async Task<PaginatedList<DataPack>> GetPaginatedAsync(string? searchString, int pageIndex, int pageSize)
+        {
+            var dataPacks = _context.DataPacks
+                .Include(d => d.DataPackCategory)
+                .Include(d => d.GameVersion)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                dataPacks = dataPacks.Where(s => s.Title.Contains(searchString) || s.Author.Contains(searchString));
+            }
+
+            dataPacks = dataPacks.OrderByDescending(d => d.Id);
+
+            return await PaginatedList<DataPack>.CreateAsync(dataPacks, pageIndex, pageSize);
+        }
     }
 }

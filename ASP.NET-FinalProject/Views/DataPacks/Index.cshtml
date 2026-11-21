@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ASP.NET_FinalProject.Models.DataPack>
+﻿@model PaginatedList<DataPack>
 
 @{
     ViewData["Title"] = "Data Packs Catalog";
@@ -34,4 +34,41 @@
         </div>
     }
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                <a class="page-link bg-dark text-light border-secondary"
+                   asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-searchString="@ViewData["CurrentFilter"]">
+                    Previous
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link @(i == Model.PageIndex ? "bg-primary border-primary text-white" : "bg-dark text-light border-secondary")"
+                       asp-action="Index"
+                       asp-route-pageNumber="@i"
+                       asp-route-searchString="@ViewData["CurrentFilter"]">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                <a class="page-link bg-dark text-light border-secondary"
+                   asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-searchString="@ViewData["CurrentFilter"]">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
 

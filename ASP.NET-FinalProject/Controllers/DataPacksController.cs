@@ -15,10 +15,11 @@ namespace ASP.NET_FinalProject.Controllers
             _dataPackService = dataPackService;
         }
 
-        public async Task<IActionResult> Index(string? searchString)
+        public async Task<IActionResult> Index(string? searchString, int pageNumber = 1)
         {
             ViewData["CurrentFilter"] = searchString;
-            var dataPacks = await _dataPackService.GetAllAsync(searchString);
+            const int pageSize = 6;
+            var dataPacks = await _dataPackService.GetPaginatedAsync(searchString, pageNumber, pageSize);
             return View(dataPacks);
         }
 

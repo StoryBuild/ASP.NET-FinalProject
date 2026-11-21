@@ -14,5 +14,6 @@ namespace ASP.NET_FinalProject.Services.Interfaces
 
         Task<IEnumerable<DataPackCategory>> GetCategoriesAsync();
         Task<IEnumerable<GameVersion>> GetGameVersionsAsync();
+        Task<PaginatedList<DataPack>> GetPaginatedAsync(string? searchString, int pageIndex, int pageSize);
     }
 }
