@@ -2,5 +2,6 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
+  <Project Path="ASP.NET-FinalProject.Tests/ASP.NET-FinalProject.Tests.csproj" Id="ce83ea58-65fd-48bd-80a5-0c3d667e7d2a" />
   <Project Path="ASP.NET-FinalProject/ASP.NET-FinalProject.csproj" />
 </Solution>
