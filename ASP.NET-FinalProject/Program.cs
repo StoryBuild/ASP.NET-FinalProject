@@ -1,30 +1,25 @@
 using ASP.NET_FinalProject.Data;
-using ASP.NET_FinalProject.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using ASP.NET_FinalProject.Data;
-using ASP.NET_FinalProject.Data;
 using ASP.NET_FinalProject.Services;
 using ASP.NET_FinalProject.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP.NET_FinalProject
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
                 options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IModProjectService, ModProjectService>();
@@ -35,16 +30,7 @@ namespace ASP.NET_FinalProject
 
             using (var scope = app.Services.CreateScope())
             {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var roles = new[] { "Administrator", "User" };
-
-                foreach (var role in roles)
-                {
-                    if (!roleManager.RoleExistsAsync(role).GetAwaiter().GetResult())
-                    {
-                        roleManager.CreateAsync(new IdentityRole(role)).GetAwaiter().GetResult();
-                    }
-                }
+                await DbSeeder.SeedAsync(scope.ServiceProvider);
             }
 
             if (!app.Environment.IsDevelopment())
@@ -73,7 +59,7 @@ namespace ASP.NET_FinalProject
 
             app.MapRazorPages();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
