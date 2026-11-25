@@ -1,37 +1,29 @@
-using ASP.NET_FinalProject.Data;
+using ASP.NET_FinalProject.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ASP.NET_FinalProject.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IModProjectService _modProjectService;
+        private readonly IResourcePackService _resourcePackService;
+        private readonly IDataPackService _dataPackService;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(
+            IModProjectService modProjectService,
+            IResourcePackService resourcePackService,
+            IDataPackService dataPackService)
         {
-            _context = context;
+            _modProjectService = modProjectService;
+            _resourcePackService = resourcePackService;
+            _dataPackService = dataPackService;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.RecentMods = await _context.ModProjects
-                .Include(m => m.Category)
-                .OrderByDescending(m => m.Id)
-                .Take(4)
-                .ToListAsync();
-
-            ViewBag.RecentResourcePacks = await _context.ResourcePacks
-                .Include(r => r.ResourceCategory)
-                .OrderByDescending(r => r.Id)
-                .Take(4)
-                .ToListAsync();
-
-            ViewBag.RecentDataPacks = await _context.DataPacks
-                .Include(d => d.DataPackCategory)
-                .OrderByDescending(d => d.Id)
-                .Take(4)
-                .ToListAsync();
+            ViewBag.RecentMods = await _modProjectService.GetPaginatedAsync(null, 1, 4);
+            ViewBag.RecentResourcePacks = await _resourcePackService.GetPaginatedAsync(null, 1, 4);
+            ViewBag.RecentDataPacks = await _dataPackService.GetPaginatedAsync(null, 1, 4);
 
             return View();
         }

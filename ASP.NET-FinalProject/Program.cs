@@ -3,6 +3,7 @@ using ASP.NET_FinalProject.Services;
 using ASP.NET_FinalProject.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ASP.NET_FinalProject
 {
@@ -20,7 +21,10 @@ namespace ASP.NET_FinalProject
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             builder.Services.AddScoped<IModProjectService, ModProjectService>();
             builder.Services.AddScoped<IResourcePackService, ResourcePackService>();

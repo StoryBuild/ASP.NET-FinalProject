@@ -7,21 +7,26 @@ namespace ASP.NET_FinalProject.Models
     {
         public int Id { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Title must be between 2 and 100 characters.")]
         public string Title { get; set; } = null!;
 
-        [Required, MaxLength(1000)]
+        [Required]
+        [StringLength(1000, MinimumLength = 10, ErrorMessage = "Description must be between 10 and 1000 characters.")]
         public string Description { get; set; } = null!;
 
-        [Required, MaxLength(50)]
+        [Required]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Author must be between 2 and 50 characters.")]
         public string Author { get; set; } = null!;
 
-        [Url]
+        [Url(ErrorMessage = "Please enter a valid image URL.")]
         public string? ImageUrl { get; set; }
 
-        [Required, Url]
+        [Required]
+        [Url(ErrorMessage = "Please enter a valid download URL.")]
         public string DownloadUrl { get; set; } = null!;
 
+        [Range(0, int.MaxValue, ErrorMessage = "Downloads count cannot be negative.")]
         public int Downloads { get; set; }
 
         public int ResourceCategoryId { get; set; }
